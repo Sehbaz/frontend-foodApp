@@ -6,12 +6,12 @@ export default function Home() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch("https://mocki.io/v1/d4867d8b-b5d5-4a48-a4ab-79131b5809b8")
+    fetch("http://localhost:8080/api/restaurant/")
       .then((res) => res.json())
       .then(
         (result) => {
           setIsLoaded(true);
-          setItems(result);
+          setItems(result.restaurants);
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -22,6 +22,7 @@ export default function Home() {
         }
       );
   }, []);
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
@@ -32,9 +33,7 @@ export default function Home() {
         <Header />
         <ul>
           {items.map((item) => (
-            <li key={item.id}>
-              {item.name} {item.price}
-            </li>
+            <li key={item.id}>{item.restaurant_name}</li>
           ))}
         </ul>
       </div>
