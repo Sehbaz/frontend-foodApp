@@ -1,6 +1,6 @@
 import Header from "../../common/header/Header";
 import React, { useState, useEffect } from "react";
-import SearchRes from "../SearchRes";
+import SearchRes from "./SearchRes";
 
 export default function Home() {
   const [error, setError] = useState(null);
@@ -35,7 +35,6 @@ export default function Home() {
     });
     setValue(value);
     setItems(filtered);
-    console.log(value);
   };
 
   return (

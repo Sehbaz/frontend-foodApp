@@ -11,8 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { createMuiTheme } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import Home from "../../screens/home/Home";
-import SearchRes from "../../screens/SearchRes";
+import Modal from "react-modal";
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -64,7 +63,15 @@ export default function Header(props) {
     //setValue(e.target.value);
     props.onChange(e.target.value);
   };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const setModalIsOpenToTrue = () => {
+    setModalIsOpen(true);
+  };
+
+  const setModalIsOpenToFalse = () => {
+    setModalIsOpen(false);
+  };
   return (
     <div value={value}>
       <AppBar position="static" className={classes.header}>
@@ -88,9 +95,18 @@ export default function Header(props) {
             />
           </FormControl>
 
-          <Button variant="contained" startIcon={<AccountCircle />}>
+          <Button
+            variant="contained"
+            onClick={setModalIsOpenToTrue}
+            startIcon={<AccountCircle />}
+          >
             LOGIN
           </Button>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={setModalIsOpenToFalse}
+            ariaHideApp={false}
+          ></Modal>
         </Toolbar>
       </AppBar>
     </div>
