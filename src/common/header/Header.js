@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,6 +11,8 @@ import FormControl from "@material-ui/core/FormControl";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { createMuiTheme } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
+import Home from "../../screens/home/Home";
+import SearchRes from "../../screens/SearchRes";
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -41,20 +43,30 @@ const useStyles = makeStyles({
   },
   formContainer: {
     color: "white",
+
     width: "250px",
     borderBottomColor: "green",
     borderColor: "red",
     "&.MuiInput-underline:after": {
       borderBottomColor: "white",
     },
+    [theme.breakpoints.between("0", "460")]: {
+      margin: "15px 0px",
+    },
   },
 });
 
-export default function Header() {
+export default function Header(props) {
   const classes = useStyles();
+  const [value, setValue] = useState("");
+
+  const handleChange = (e) => {
+    //setValue(e.target.value);
+    props.onChange(e.target.value);
+  };
 
   return (
-    <div>
+    <div value={value}>
       <AppBar position="static" className={classes.header}>
         <Toolbar className={classes.toolbarContainer}>
           <IconButton edge="start" color="inherit" aria-label="menu">
@@ -63,6 +75,8 @@ export default function Header() {
 
           <FormControl>
             <Input
+              onChange={handleChange}
+              value={props.value}
               className={classes.formContainer}
               id="input-with-icon-adornment"
               placeholder="Search by Restaurant Name"
@@ -82,40 +96,3 @@ export default function Header() {
     </div>
   );
 }
-
-/*
-class Header extends Component {
-  render() {
-    return (
-      <div className="header-container">
-        <div className="right-container">
-          <div className="main-icon">
-            <FastfoodIcon />
-          </div>
-        </div>
-        <div className="center-container">
-          <FormControl>
-            <Input
-              id="input-with-icon-adornment"
-              placeholder="Search by Restaurant Name"
-              startAdornment={
-                <InputAdornment position="start">
-                  <SearchIcon className="search-icon" />
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-        </div>
-        <div className="left-container">
-          <div className="button-container">
-            <Button variant="contained" startIcon={<AccountCircleIcon />}>
-              LOGIN
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-export default Header;
-*/
