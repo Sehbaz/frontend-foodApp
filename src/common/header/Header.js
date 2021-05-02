@@ -17,7 +17,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-import { FormHelperText, TextField } from "@material-ui/core";
+import { FormHelperText, InputLabel, TextField } from "@material-ui/core";
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -122,6 +122,33 @@ export default function Header(props) {
   const setModalIsOpenToFalse = () => {
     setModalIsOpen(false);
   };
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [usernameRequired, setUsernameRequired] = React.useState("none");
+  const [passwordRequired, setPasswordRequired] = React.useState("none");
+
+  const submitHandler = (e) => {
+    if (password !== "") {
+      setPasswordRequired("none");
+    } else {
+      setPasswordRequired("block");
+    }
+    if (username !== "") {
+      setUsernameRequired("none");
+    } else {
+      setUsernameRequired("block");
+    }
+  };
+  const onInputUsernameHandler = (e) => {
+    setUsername(e.target.value);
+
+    setUsernameRequired("none");
+  };
+  const onInputPasswordHandler = (e) => {
+    setPassword(e.target.value);
+
+    setPasswordRequired("none");
+  };
 
   return (
     <div value={value}>
@@ -169,7 +196,41 @@ export default function Header(props) {
             </Tabs>
 
             <TabPanel value={valueTab} index={0}>
-              Login
+              <FormControl required>
+                <InputLabel htmlFor="username">Username</InputLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  onChange={onInputUsernameHandler}
+                />
+                <FormHelperText
+                  style={{ display: usernameRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
+              <FormControl required>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input
+                  id="password"
+                  type="text"
+                  onChange={onInputPasswordHandler}
+                />
+                <FormHelperText
+                  style={{ display: passwordRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={submitHandler}
+              >
+                LOGIN
+              </Button>
             </TabPanel>
             <TabPanel value={valueTab} index={1}>
               Register
