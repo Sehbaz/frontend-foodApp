@@ -12,6 +12,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import { createMuiTheme } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Modal from "react-modal";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import PropTypes from "prop-types";
+import { FormHelperText, TextField } from "@material-ui/core";
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -53,11 +59,55 @@ const useStyles = makeStyles({
       margin: "15px 0px",
     },
   },
+  content: {
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+  },
 });
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={2}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 export default function Header(props) {
   const classes = useStyles();
   const [value, setValue] = useState("");
+
+  const [valueTab, setValueTab] = React.useState(0);
+
+  const handleChangeTab = (event, newValue) => {
+    setValueTab(newValue);
+  };
 
   const handleChange = (e) => {
     //setValue(e.target.value);
@@ -72,6 +122,7 @@ export default function Header(props) {
   const setModalIsOpenToFalse = () => {
     setModalIsOpen(false);
   };
+
   return (
     <div value={value}>
       <AppBar position="static" className={classes.header}>
@@ -106,7 +157,24 @@ export default function Header(props) {
             isOpen={modalIsOpen}
             onRequestClose={setModalIsOpenToFalse}
             ariaHideApp={false}
-          ></Modal>
+            className={classes.content}
+          >
+            <Tabs
+              value={valueTab}
+              onChange={handleChangeTab}
+              aria-label="simple tabs example"
+            >
+              <Tab label="Login" {...a11yProps(0)} />
+              <Tab label="Register" {...a11yProps(1)} />
+            </Tabs>
+
+            <TabPanel value={valueTab} index={0}>
+              Login
+            </TabPanel>
+            <TabPanel value={valueTab} index={1}>
+              Register
+            </TabPanel>
+          </Modal>
         </Toolbar>
       </AppBar>
     </div>
