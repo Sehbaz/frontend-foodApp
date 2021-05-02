@@ -18,6 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { FormHelperText, InputLabel, TextField } from "@material-ui/core";
+import validator from "validator";
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -171,11 +172,15 @@ export default function Header(props) {
   const [password, setPassword] = React.useState("");
   const [contact, setContact] = React.useState("");
 
+  const [emailError, setEmailError] = useState("");
+
   const [firstnameRequired, setFirstnameRequired] = React.useState("none");
   const [lastnameRequired, setLastnameRequired] = React.useState("none");
   const [emailRequired, setEmailRequired] = React.useState("none");
   const [passwordRequired, setPasswordRequired] = React.useState("none");
   const [contactRequired, setContactRequired] = React.useState("none");
+
+  const [emailErrorRequired, setEmailErrorRequired] = React.useState("none");
 
   const onInputFirstnameHandler = (e) => {
     setFirstname(e.target.value);
@@ -210,6 +215,12 @@ export default function Header(props) {
     }
     if (email !== "") {
       setEmailRequired("none");
+
+      if (validator.isEmail(email)) {
+        setEmailErrorRequired("none");
+      } else {
+        setEmailErrorRequired("block");
+      }
     } else {
       setEmailRequired("block");
     }
@@ -223,6 +234,18 @@ export default function Header(props) {
     } else {
       setContactRequired("block");
     }
+  };
+
+  //Email Validator
+
+  const validateEmail = (e) => {
+    /*
+    if (validator.isEmail(email)) {
+      setEmailError("");
+    } else {
+      setEmailError("Enter valid Email!");
+    }
+    */
   };
 
   return (
@@ -343,6 +366,11 @@ export default function Header(props) {
                   style={{ display: emailRequired, color: "red" }}
                 >
                   <span>required</span>
+                </FormHelperText>
+                <FormHelperText
+                  style={{ display: emailErrorRequired, color: "red" }}
+                >
+                  <span>invalid email</span>
                 </FormHelperText>
               </FormControl>
               <FormControl required fullWidth className={classes.modalItem}>
