@@ -370,7 +370,7 @@ export default function Header(props) {
                 <FormHelperText
                   style={{ display: emailErrorRequired, color: "red" }}
                 >
-                  <span>invalid email</span>
+                  <span>Invalid Email</span>
                 </FormHelperText>
               </FormControl>
               <FormControl required fullWidth className={classes.modalItem}>
