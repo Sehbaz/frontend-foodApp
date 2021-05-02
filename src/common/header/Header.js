@@ -48,7 +48,6 @@ const useStyles = makeStyles({
   },
   formContainer: {
     color: "white",
-
     width: "250px",
     borderBottomColor: "green",
     borderColor: "red",
@@ -64,6 +63,20 @@ const useStyles = makeStyles({
     left: "50%",
     top: "50%",
     transform: "translate(-50%, -50%)",
+    border: "1px solid grey",
+    backgroundColor: "white",
+    padding: "1em",
+    width: "35vw",
+    [theme.breakpoints.between("0", "460")]: {
+      width: "80vw",
+    },
+    [theme.breakpoints.between("460", "900")]: {
+      width: "55vw",
+    },
+    textAlign: "center",
+  },
+  modalItem: {
+    margin: "2em 0 0 0 ",
   },
 });
 
@@ -196,7 +209,7 @@ export default function Header(props) {
             </Tabs>
 
             <TabPanel value={valueTab} index={0}>
-              <FormControl required>
+              <FormControl required fullWidth className={classes.modalItem}>
                 <InputLabel htmlFor="username">Username</InputLabel>
                 <Input
                   id="username"
@@ -210,7 +223,7 @@ export default function Header(props) {
                 </FormHelperText>
               </FormControl>
               <br />
-              <FormControl required>
+              <FormControl required fullWidth className={classes.modalItem}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <Input
                   id="password"
@@ -228,6 +241,7 @@ export default function Header(props) {
                 variant="contained"
                 color="primary"
                 onClick={submitHandler}
+                className={classes.modalItem}
               >
                 LOGIN
               </Button>
