@@ -19,6 +19,9 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { FormHelperText, InputLabel, TextField } from "@material-ui/core";
 import validator from "validator";
+import { indigo } from "@material-ui/core/colors";
+
+var passwordValidator = require("password-validator");
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -182,6 +185,10 @@ export default function Header(props) {
 
   const [emailErrorRequired, setEmailErrorRequired] = React.useState("none");
 
+  const [inavlidPasswordRequired, setInvalidPasswordRequired] = React.useState(
+    "none"
+  );
+
   const onInputFirstnameHandler = (e) => {
     setFirstname(e.target.value);
     setFirstnameRequired("none");
@@ -226,6 +233,33 @@ export default function Header(props) {
     }
     if (password !== "") {
       setPasswordRequired("none");
+      // Create a schema
+      var schema = new passwordValidator();
+      // Add properties to it
+      schema
+        .is()
+        .min(8) // Minimum length 8
+        .is()
+        .max(100) // Maximum length 100
+        .has()
+        .uppercase() // Must have uppercase letters
+        .has()
+        .lowercase() // Must have lowercase letters
+        .has()
+        .digits(2) // Must have at least 2 digits
+        .has()
+        .not()
+        .spaces() // Should not have spaces
+        .is()
+        .not()
+        .oneOf(["Passw0rd", "Password123"]); // Blacklist these values
+
+      // Validate against a password string
+      if (schema.validate(password)) {
+        setInvalidPasswordRequired("none");
+      } else {
+        setInvalidPasswordRequired("block");
+      }
     } else {
       setPasswordRequired("block");
     }
@@ -234,18 +268,6 @@ export default function Header(props) {
     } else {
       setContactRequired("block");
     }
-  };
-
-  //Email Validator
-
-  const validateEmail = (e) => {
-    /*
-    if (validator.isEmail(email)) {
-      setEmailError("");
-    } else {
-      setEmailError("Enter valid Email!");
-    }
-    */
   };
 
   return (
@@ -384,6 +406,14 @@ export default function Header(props) {
                   style={{ display: passwordRequired, color: "red" }}
                 >
                   <span>required</span>
+                </FormHelperText>
+                <FormHelperText
+                  style={{ display: inavlidPasswordRequired, color: "red" }}
+                >
+                  <span>
+                    Password must contain at least one capital letter, one small
+                    letter, one number, and one special character
+                  </span>
                 </FormHelperText>
               </FormControl>
               <br />
