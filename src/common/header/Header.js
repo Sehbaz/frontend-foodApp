@@ -135,32 +135,94 @@ export default function Header(props) {
   const setModalIsOpenToFalse = () => {
     setModalIsOpen(false);
   };
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [usernameRequired, setUsernameRequired] = React.useState("none");
-  const [passwordRequired, setPasswordRequired] = React.useState("none");
+  const [loginContact, setLoginContact] = React.useState("");
+  const [loginPassword, setLoginPassword] = React.useState("");
+  const [loginContactRequired, setLoginContactRequired] = React.useState(
+    "none"
+  );
+  const [loginPasswordRequired, setLoginPasswordRequired] = React.useState(
+    "none"
+  );
 
-  const submitHandler = (e) => {
+  const submitLoginHandler = (e) => {
+    if (loginPassword !== "") {
+      setLoginPasswordRequired("none");
+    } else {
+      setLoginPasswordRequired("block");
+    }
+    if (loginContact !== "") {
+      setLoginContactRequired("none");
+    } else {
+      setLoginContactRequired("block");
+    }
+  };
+  const onInputLoginUsernameHandler = (e) => {
+    setLoginContact(e.target.value);
+    setLoginContactRequired("none");
+  };
+  const onInputLoginPasswordHandler = (e) => {
+    setLoginPassword(e.target.value);
+    setLoginPasswordRequired("none");
+  };
+
+  const [firstname, setFirstname] = React.useState("");
+  const [lastname, setLastname] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [contact, setContact] = React.useState("");
+
+  const [firstnameRequired, setFirstnameRequired] = React.useState("none");
+  const [lastnameRequired, setLastnameRequired] = React.useState("none");
+  const [emailRequired, setEmailRequired] = React.useState("none");
+  const [passwordRequired, setPasswordRequired] = React.useState("none");
+  const [contactRequired, setContactRequired] = React.useState("none");
+
+  const onInputFirstnameHandler = (e) => {
+    setFirstname(e.target.value);
+    setFirstnameRequired("none");
+  };
+  const onInputLastnameHandler = (e) => {
+    setLastname(e.target.value);
+    setLastnameRequired("none");
+  };
+  const onInputEmailHandler = (e) => {
+    setEmail(e.target.value);
+    setEmailRequired("none");
+  };
+  const onInputPasswordHandler = (e) => {
+    setPassword(e.target.value);
+    setPasswordRequired("none");
+  };
+  const onInputContactHandler = (e) => {
+    setContact(e.target.value);
+    setContactRequired("none");
+  };
+  const submitRegisterHandler = (e) => {
+    if (firstname !== "") {
+      setFirstnameRequired("none");
+    } else {
+      setFirstnameRequired("block");
+    }
+    if (lastname !== "") {
+      setLastnameRequired("none");
+    } else {
+      setLastnameRequired("block");
+    }
+    if (email !== "") {
+      setEmailRequired("none");
+    } else {
+      setEmailRequired("block");
+    }
     if (password !== "") {
       setPasswordRequired("none");
     } else {
       setPasswordRequired("block");
     }
-    if (username !== "") {
-      setUsernameRequired("none");
+    if (contact !== "") {
+      setContactRequired("none");
     } else {
-      setUsernameRequired("block");
+      setContactRequired("block");
     }
-  };
-  const onInputUsernameHandler = (e) => {
-    setUsername(e.target.value);
-
-    setUsernameRequired("none");
-  };
-  const onInputPasswordHandler = (e) => {
-    setPassword(e.target.value);
-
-    setPasswordRequired("none");
   };
 
   return (
@@ -202,6 +264,7 @@ export default function Header(props) {
             <Tabs
               value={valueTab}
               onChange={handleChangeTab}
+              variant="fullWidth"
               aria-label="simple tabs example"
             >
               <Tab label="Login" {...a11yProps(0)} />
@@ -214,10 +277,10 @@ export default function Header(props) {
                 <Input
                   id="username"
                   type="text"
-                  onChange={onInputUsernameHandler}
+                  onChange={onInputLoginUsernameHandler}
                 />
                 <FormHelperText
-                  style={{ display: usernameRequired, color: "red" }}
+                  style={{ display: loginContactRequired, color: "red" }}
                 >
                   <span>required</span>
                 </FormHelperText>
@@ -228,6 +291,65 @@ export default function Header(props) {
                 <Input
                   id="password"
                   type="text"
+                  onChange={onInputLoginPasswordHandler}
+                />
+                <FormHelperText
+                  style={{ display: loginPasswordRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={submitLoginHandler}
+                className={classes.modalItem}
+              >
+                LOGIN
+              </Button>
+            </TabPanel>
+            <TabPanel value={valueTab} index={1}>
+              <FormControl required fullWidth className={classes.modalItem}>
+                <InputLabel htmlFor="firstname">First Name</InputLabel>
+                <Input
+                  id="firstname"
+                  type="text"
+                  onChange={onInputFirstnameHandler}
+                />
+                <FormHelperText
+                  style={{ display: firstnameRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <FormControl fullWidth className={classes.modalItem}>
+                <InputLabel htmlFor="lastname">Last Name</InputLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  onChange={onInputLastnameHandler}
+                />
+                <FormHelperText
+                  style={{ display: lastnameRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <FormControl required fullWidth className={classes.modalItem}>
+                <InputLabel htmlFor="email">Email</InputLabel>
+                <Input id="email" type="email" onChange={onInputEmailHandler} />
+                <FormHelperText
+                  style={{ display: emailRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <FormControl required fullWidth className={classes.modalItem}>
+                <InputLabel htmlFor="password">Password </InputLabel>
+                <Input
+                  id="password"
+                  type="password"
                   onChange={onInputPasswordHandler}
                 />
                 <FormHelperText
@@ -237,17 +359,28 @@ export default function Header(props) {
                 </FormHelperText>
               </FormControl>
               <br />
+              <FormControl required fullWidth className={classes.modalItem}>
+                <InputLabel htmlFor="contact">Contact no</InputLabel>
+                <Input
+                  id="contact"
+                  type="phone"
+                  onChange={onInputContactHandler}
+                />
+                <FormHelperText
+                  style={{ display: contactRequired, color: "red" }}
+                >
+                  <span>required</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
               <Button
                 variant="contained"
                 color="primary"
-                onClick={submitHandler}
+                onClick={submitRegisterHandler}
                 className={classes.modalItem}
               >
-                LOGIN
+                SIGNUP
               </Button>
-            </TabPanel>
-            <TabPanel value={valueTab} index={1}>
-              Register
             </TabPanel>
           </Modal>
         </Toolbar>
