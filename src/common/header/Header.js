@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -272,8 +272,6 @@ export default function Header(props) {
       let reg = new RegExp(/^\d*$/).test(contact);
       let contactLength = contact.length;
       if (!reg || contactLength !== 10) {
-        console.log(!reg);
-        console.log(contact.length);
         setPhoneValidationRequired("block");
       } else {
         setPhoneValidationRequired("none");
@@ -281,6 +279,24 @@ export default function Header(props) {
     } else {
       setContactRequired("block");
     }
+
+    // POST request using fetch inside useEffect React hook
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contact_number: contact,
+        email_address: email,
+        first_name: firstname,
+        last_name: lastname,
+        password: password,
+      }),
+    };
+    fetch("http://localhost:8080/api/customer/signup", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+
+    // empty dependency array means this effect will only run once (like componentDidMount in classes)
   };
 
   return (
