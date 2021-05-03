@@ -71,7 +71,7 @@ const useStyles = makeStyles({
     border: "1px solid grey",
     backgroundColor: "white",
     padding: "1em",
-    width: "35vw",
+    width: "30vw",
     [theme.breakpoints.between("0", "460")]: {
       width: "80vw",
     },
@@ -148,30 +148,48 @@ export default function Header(props) {
   const [loginPasswordRequired, setLoginPasswordRequired] = React.useState(
     "none"
   );
+  const [invalidContact, setInvalidContact] = React.useState("none");
+  const [invalidCred, setInvalidCred] = React.useState("none");
 
   const submitLoginHandler = (e) => {
     var encodedData = base64.encode(loginContact + ":" + loginPassword);
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + encodedData,
-      },
-      body: JSON.stringify({}),
-    };
-    fetch("http://localhost:8080/api/customer/login", requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
     if (loginPassword !== "") {
       setLoginPasswordRequired("none");
     } else {
       setLoginPasswordRequired("block");
+      setInvalidContact("none");
     }
     if (loginContact !== "") {
       setLoginContactRequired("none");
     } else {
       setLoginContactRequired("block");
+      setInvalidContact("none");
+    }
+    if (loginPassword !== "" && loginContact !== "") {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic " + encodedData,
+        },
+        body: JSON.stringify({}),
+      };
+      fetch("http://localhost:8080/api/customer/login", requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.code === "ATH-001") {
+            setInvalidContact("block");
+            setInvalidCred("none");
+          } else if (data.code === "ATH-002") {
+            setInvalidContact("none");
+            setInvalidCred("block");
+          } else {
+            setInvalidCred("none");
+            setInvalidContact("none");
+          }
+        });
     }
   };
   const onInputLoginUsernameHandler = (e) => {
@@ -361,9 +379,9 @@ export default function Header(props) {
 
             <TabPanel value={valueTab} index={0}>
               <FormControl required fullWidth className={classes.modalItem}>
-                <InputLabel htmlFor="username">Username</InputLabel>
+                <InputLabel htmlFor="logincontact">Contact </InputLabel>
                 <Input
-                  id="username"
+                  id="logincontact"
                   type="text"
                   onChange={onInputLoginUsernameHandler}
                 />
@@ -375,16 +393,24 @@ export default function Header(props) {
               </FormControl>
               <br />
               <FormControl required fullWidth className={classes.modalItem}>
-                <InputLabel htmlFor="password">Password</InputLabel>
+                <InputLabel htmlFor="loginpassword">Password</InputLabel>
                 <Input
-                  id="password"
-                  type="text"
+                  id="loginpassword"
+                  type="password"
                   onChange={onInputLoginPasswordHandler}
                 />
                 <FormHelperText
                   style={{ display: loginPasswordRequired, color: "red" }}
                 >
                   <span>required</span>
+                </FormHelperText>
+                <FormHelperText
+                  style={{ display: invalidContact, color: "red" }}
+                >
+                  <span>This contact number has not been registered!</span>
+                </FormHelperText>
+                <FormHelperText style={{ display: invalidCred, color: "red" }}>
+                  <span>Invalid Credentials</span>
                 </FormHelperText>
               </FormControl>
               <br />
