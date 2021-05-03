@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -19,9 +19,10 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { FormHelperText, InputLabel, TextField } from "@material-ui/core";
 import validator from "validator";
-import { indigo } from "@material-ui/core/colors";
+import axios from "axios";
 
 var passwordValidator = require("password-validator");
+var base64 = require("base-64");
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -149,6 +150,19 @@ export default function Header(props) {
   );
 
   const submitLoginHandler = (e) => {
+    var encodedData = base64.encode(loginContact + ":" + loginPassword);
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + encodedData,
+      },
+      body: JSON.stringify({}),
+    };
+    fetch("http://localhost:8080/api/customer/login", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
     if (loginPassword !== "") {
       setLoginPasswordRequired("none");
     } else {
