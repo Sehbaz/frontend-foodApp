@@ -17,7 +17,12 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
-import { FormHelperText, InputLabel, TextField } from "@material-ui/core";
+import {
+  FormHelperText,
+  InputLabel,
+  Snackbar,
+  TextField,
+} from "@material-ui/core";
 import validator from "validator";
 import axios from "axios";
 
@@ -140,6 +145,7 @@ export default function Header(props) {
   const setModalIsOpenToFalse = () => {
     setModalIsOpen(false);
   };
+
   const [loginContact, setLoginContact] = React.useState("");
   const [loginPassword, setLoginPassword] = React.useState("");
   const [loginContactRequired, setLoginContactRequired] = React.useState(
@@ -188,6 +194,8 @@ export default function Header(props) {
           } else {
             setInvalidCred("none");
             setInvalidContact("none");
+            setOpen(true);
+            setModalIsOpen(false);
           }
         });
     }
@@ -206,8 +214,6 @@ export default function Header(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [contact, setContact] = React.useState("");
-
-  const [emailError, setEmailError] = useState("");
 
   const [firstnameRequired, setFirstnameRequired] = React.useState("none");
   const [lastnameRequired, setLastnameRequired] = React.useState("none");
@@ -326,13 +332,28 @@ export default function Header(props) {
     };
     fetch("http://localhost:8080/api/customer/signup", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data);
+        if (data.code !== "SGR-005") {
+        }
+      });
 
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
   };
+  const [open, setOpen] = React.useState(false);
 
+  const handleCloseSnack = () => {
+    setOpen(false);
+  };
   return (
     <div value={value}>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        open={open}
+        onClose={handleCloseSnack}
+        autoHideDuration={4000}
+        message="Logged in successfully!"
+      ></Snackbar>
       <AppBar position="static" className={classes.header}>
         <Toolbar className={classes.toolbarContainer}>
           <IconButton edge="start" color="inherit" aria-label="menu">
