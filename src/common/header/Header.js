@@ -24,7 +24,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import validator from "validator";
-import axios from "axios";
+import { DateRange } from "@material-ui/icons";
 
 var passwordValidator = require("password-validator");
 var base64 = require("base-64");
@@ -74,6 +74,7 @@ const useStyles = makeStyles({
     top: "50%",
     transform: "translate(-50%, -50%)",
     border: "1px solid grey",
+    outline: "none",
     backgroundColor: "white",
     padding: "1em",
     width: "30vw",
@@ -220,15 +221,15 @@ export default function Header(props) {
   const [emailRequired, setEmailRequired] = React.useState("none");
   const [passwordRequired, setPasswordRequired] = React.useState("none");
   const [contactRequired, setContactRequired] = React.useState("none");
-
   const [emailErrorRequired, setEmailErrorRequired] = React.useState("none");
-
   const [inavlidPasswordRequired, setInvalidPasswordRequired] = React.useState(
     "none"
   );
   const [phoneValidationRequred, setPhoneValidationRequired] = React.useState(
     "none"
   );
+
+  const [userExist, setUserExist] = React.useState("none");
 
   const onInputFirstnameHandler = (e) => {
     setFirstname(e.target.value);
@@ -306,6 +307,7 @@ export default function Header(props) {
     }
     if (contact !== "") {
       setContactRequired("none");
+      setUserExist("none");
 
       let reg = new RegExp(/^\d*$/).test(contact);
       let contactLength = contact.length;
@@ -333,17 +335,30 @@ export default function Header(props) {
     fetch("http://localhost:8080/api/customer/signup", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        if (data.code !== "SGR-005") {
+        if (data.code == "SGR-001") {
+          console.log("Exists");
+          setUserExist("block");
+        } else if (
+          data.code !== "SGR-002" &&
+          data.code !== "SGR-003" &&
+          data.code !== "SGR-004" &&
+          data.code !== "SGR-005"
+        ) {
+          setValueTab(0);
+          setOpenLoginTab(true);
+          setUserExist("none");
         }
       });
-
-    // empty dependency array means this effect will only run once (like componentDidMount in classes)
   };
   const [open, setOpen] = React.useState(false);
 
   const handleCloseSnack = () => {
     setOpen(false);
+  };
+  const [openLoginTab, setOpenLoginTab] = React.useState(false);
+
+  const handleCloseSnackRegister = () => {
+    setOpenLoginTab(false);
   };
   return (
     <div value={value}>
@@ -353,6 +368,13 @@ export default function Header(props) {
         onClose={handleCloseSnack}
         autoHideDuration={4000}
         message="Logged in successfully!"
+      ></Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        open={openLoginTab}
+        onClose={handleCloseSnackRegister}
+        autoHideDuration={4000}
+        message="Registered successfully! Please login now !"
       ></Snackbar>
       <AppBar position="static" className={classes.header}>
         <Toolbar className={classes.toolbarContainer}>
@@ -525,6 +547,12 @@ export default function Header(props) {
                   <span>
                     Contact No. must contain only numbers and must be 10 digits
                     long
+                  </span>
+                </FormHelperText>
+                <FormHelperText style={{ display: userExist, color: "red" }}>
+                  <span>
+                    This contact number is already registered! Try other contact
+                    number.
                   </span>
                 </FormHelperText>
               </FormControl>
