@@ -188,6 +188,9 @@ export default function Header(props) {
   const [inavlidPasswordRequired, setInvalidPasswordRequired] = React.useState(
     "none"
   );
+  const [phoneValidationRequred, setPhoneValidationRequired] = React.useState(
+    "none"
+  );
 
   const onInputFirstnameHandler = (e) => {
     setFirstname(e.target.value);
@@ -265,6 +268,16 @@ export default function Header(props) {
     }
     if (contact !== "") {
       setContactRequired("none");
+
+      let reg = new RegExp(/^\d*$/).test(contact);
+      let contactLength = contact.length;
+      if (!reg || contactLength !== 10) {
+        console.log(!reg);
+        console.log(contact.length);
+        setPhoneValidationRequired("block");
+      } else {
+        setPhoneValidationRequired("none");
+      }
     } else {
       setContactRequired("block");
     }
@@ -421,13 +434,21 @@ export default function Header(props) {
                 <InputLabel htmlFor="contact">Contact no</InputLabel>
                 <Input
                   id="contact"
-                  type="phone"
+                  type="tel"
                   onChange={onInputContactHandler}
                 />
                 <FormHelperText
                   style={{ display: contactRequired, color: "red" }}
                 >
                   <span>required</span>
+                </FormHelperText>
+                <FormHelperText
+                  style={{ display: phoneValidationRequred, color: "red" }}
+                >
+                  <span>
+                    Contact No. must contain only numbers and must be 10 digits
+                    long
+                  </span>
                 </FormHelperText>
               </FormControl>
               <br />
