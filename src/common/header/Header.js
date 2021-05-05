@@ -17,6 +17,8 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import {
   FormHelperText,
   InputLabel,
@@ -124,6 +126,16 @@ function a11yProps(index) {
   };
 }
 export default function Header(props) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClickMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   const classes = useStyles();
   const [value, setValue] = useState("");
 
@@ -157,7 +169,7 @@ export default function Header(props) {
   );
   const [invalidContact, setInvalidContact] = React.useState("none");
   const [invalidCred, setInvalidCred] = React.useState("none");
-
+  const [userFirstName, setUserFirstName] = React.useState("");
   const submitLoginHandler = (e) => {
     var encodedData = base64.encode(loginContact + ":" + loginPassword);
 
@@ -197,6 +209,9 @@ export default function Header(props) {
             setInvalidContact("none");
             setOpen(true);
             setModalIsOpen(false);
+            setButtonContainer("block");
+            setLoginButtonContainer("none");
+            setUserFirstName(data.first_name);
           }
         });
     }
@@ -360,6 +375,12 @@ export default function Header(props) {
   const handleCloseSnackRegister = () => {
     setOpenLoginTab(false);
   };
+
+  const [buttonContainer, setButtonContainer] = React.useState("none");
+  const [loginButtonContainer, setLoginButtonContainer] = React.useState(
+    "block"
+  );
+
   return (
     <div value={value}>
       <Snackbar
@@ -397,13 +418,32 @@ export default function Header(props) {
             />
           </FormControl>
 
-          <Button
-            variant="contained"
-            onClick={setModalIsOpenToTrue}
-            startIcon={<AccountCircle />}
-          >
-            LOGIN
-          </Button>
+          <div style={{ display: buttonContainer }}>
+            <Button variant="contained" startIcon={<AccountCircle />}>
+              {userFirstName}
+            </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleCloseMenu}
+            >
+              <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
+              <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
+            </Menu>
+          </div>
+          <div style={{ display: loginButtonContainer }}>
+            {" "}
+            <Button
+              variant="contained"
+              onClick={setModalIsOpenToTrue}
+              startIcon={<AccountCircle />}
+            >
+              LOGIN
+            </Button>
+          </div>
+
           <Modal
             isOpen={modalIsOpen}
             onRequestClose={setModalIsOpenToFalse}
@@ -557,6 +597,7 @@ export default function Header(props) {
                 </FormHelperText>
               </FormControl>
               <br />
+
               <Button
                 variant="contained"
                 color="primary"
