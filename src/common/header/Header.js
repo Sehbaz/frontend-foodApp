@@ -126,16 +126,6 @@ function a11yProps(index) {
   };
 }
 export default function Header(props) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClickMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
   const classes = useStyles();
   const [value, setValue] = useState("");
 
@@ -380,6 +370,20 @@ export default function Header(props) {
   const [loginButtonContainer, setLoginButtonContainer] = React.useState(
     "block"
   );
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClickLogin = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseLogin = () => {
+    setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    setAnchorEl(null);
+    setButtonContainer("none");
+    setLoginButtonContainer("block");
+  };
 
   return (
     <div value={value}>
@@ -419,7 +423,11 @@ export default function Header(props) {
           </FormControl>
 
           <div style={{ display: buttonContainer }}>
-            <Button variant="contained" startIcon={<AccountCircle />}>
+            <Button
+              variant="contained"
+              onClick={handleClickLogin}
+              startIcon={<AccountCircle />}
+            >
               {userFirstName}
             </Button>
             <Menu
@@ -427,10 +435,10 @@ export default function Header(props) {
               anchorEl={anchorEl}
               keepMounted
               open={Boolean(anchorEl)}
-              onClose={handleCloseMenu}
+              onClose={handleCloseLogin}
             >
-              <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
+              <MenuItem onClick={handleCloseLogin}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
           <div style={{ display: loginButtonContainer }}>
