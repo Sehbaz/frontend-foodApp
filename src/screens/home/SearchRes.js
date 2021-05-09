@@ -66,8 +66,9 @@ const SearchRes = (props) => {
               <Button startIcon={<StarIcon />} className={classes.ratingButton}>
                 {item.customer_rating} ({item.number_customers_rated})
               </Button>
-              <Button size="small" color="primary">
-                {item.average_price}
+              <Button>
+                <span>&#8377;{item.average_price}&nbsp; </span>
+                <span style={{ textTransform: "lowercase" }}> for two</span>
               </Button>
             </CardActions>
           </Card>
