@@ -9,6 +9,7 @@ import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import StarIcon from "@material-ui/icons/Star";
 import { createMuiTheme } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Modal from "react-modal";
