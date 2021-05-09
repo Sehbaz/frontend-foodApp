@@ -1,7 +1,8 @@
 import Header from "../../common/header/Header";
 import React, { useState, useEffect } from "react";
 import SearchRes from "./SearchRes";
-
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Details from "../details/Details";
 export default function Home() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
