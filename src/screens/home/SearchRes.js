@@ -62,13 +62,7 @@ const SearchRes = (props) => {
             }}
           >
             <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="Contemplative Reptile"
-                height="140"
-                image={item.photo_URL}
-                title="Contemplative Reptile"
-              />
+              <CardMedia component="img" height="140" image={item.photo_URL} />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
                   {item.restaurant_name}
@@ -86,7 +80,6 @@ const SearchRes = (props) => {
                 <span>&#8377;{item.average_price}&nbsp; </span>
                 <span style={{ textTransform: "lowercase" }}> for two</span>
               </Button>
-              <button onClick={restaurantHandler}>hi</button>
             </CardActions>
           </Card>
         );
