@@ -43,10 +43,7 @@ const useStyles = makeStyles({
 
 const SearchRes = (props) => {
   const classes = useStyles();
-  function restaurantHandler(name) {
-    console.log(name);
-    // ReactDOM.render(<Details value={name} />, document.getElementById("root"));
-  }
+
   return (
     <div className={classes.cardContainer}>
       {props.value.map((item, index) => {
