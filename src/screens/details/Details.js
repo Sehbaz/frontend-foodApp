@@ -6,27 +6,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStopCircle } from "@fortawesome/free-solid-svg-icons";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import AddIcon from "@material-ui/icons/Add";
-
 import RemoveRoundedIcon from "@material-ui/icons/RemoveRounded";
-import FiberManualRecordRoundedIcon from "@material-ui/icons/FiberManualRecordRounded";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  IconButton,
-  Paper,
-  Snackbar,
-  Typography,
-} from "@material-ui/core";
+import { Button, IconButton, Paper, Typography } from "@material-ui/core";
+import List from "./List";
 const theme = createMuiTheme({
   breakpoints: {
     values: {
@@ -126,7 +110,6 @@ const Details = (props) => {
     fetch("http://localhost:8080/api/restaurant/name/" + props.value)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result.restaurants[0]);
         setValue(result.restaurants[0]);
         setAdd(result.restaurants[0].address);
       });
@@ -142,47 +125,18 @@ const Details = (props) => {
     }
   };
 
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
+  const [dotColor] = useState("black");
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleCloseSnack = () => {
-    setOpen(false);
-  };
-  const itemAdded = () => {
-    setOpen(true);
-  };
-  const [dotColor, setDotColor] = useState("black");
-  const checkColor = (e) => {
-    if (e === "veg") {
-      setDotColor("green");
-    } else {
-      setDotColor("red");
-    }
-  };
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        open={open}
-        onClose={handleCloseSnack}
-        autoHideDuration={4000}
-        message="Item added to cart!"
-      ></Snackbar>
       <Header />
       <div className={classes.detailsContainer}>
         <div className={classes.container1}>
-          <img src={value.photo_URL} className={classes.media}></img>
+          <img
+            src={value.photo_URL}
+            className={classes.media}
+            alt="restaurantImage"
+          ></img>
         </div>
         <div className={classes.container2}>
           <h1>{value.restaurant_name}</h1>
@@ -221,37 +175,10 @@ const Details = (props) => {
           </div>
         </div>
       </div>
+
       <div className={classes.menuContainer}>
         <div className={classes.menuItem}>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.name}>
-                    <TableCell>
-                      <FiberManualRecordRoundedIcon
-                        style={{ color: dotColor }}
-                      />
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-
-                    <TableCell align="right"> &#8377;0.0</TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        aria-label="upload picture"
-                        component="span"
-                        onClick={itemAdded}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <List />
         </div>
         <div className={classes.cartContainer}>
           {" "}

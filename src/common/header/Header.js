@@ -9,7 +9,6 @@ import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import StarIcon from "@material-ui/icons/Star";
 import { createMuiTheme } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Modal from "react-modal";
@@ -20,14 +19,8 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import {
-  FormHelperText,
-  InputLabel,
-  Snackbar,
-  TextField,
-} from "@material-ui/core";
+import { FormHelperText, InputLabel, Snackbar } from "@material-ui/core";
 import validator from "validator";
-import { DateRange } from "@material-ui/icons";
 
 var passwordValidator = require("password-validator");
 var base64 = require("base-64");
@@ -134,10 +127,19 @@ export default function Header(props) {
 
   const handleChangeTab = (event, newValue) => {
     setValueTab(newValue);
+    setLoginContactRequired("none");
+    setInvalidCred("none");
+    setInvalidContact("none");
+    setFirstnameRequired("none");
+    setLastnameRequired("none");
+    setPasswordRequired("none");
+    setContactRequired("none");
+    setEmailRequired("none");
+    setLoginPasswordRequired("none");
   };
 
   const handleChange = (e) => {
-    //setValue(e.target.value);
+    setValue(e.target.value);
     props.onChange(e.target.value);
   };
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -341,7 +343,7 @@ export default function Header(props) {
     fetch("http://localhost:8080/api/customer/signup", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        if (data.code == "SGR-001") {
+        if (data.code === "SGR-001") {
           console.log("Exists");
           setUserExist("block");
         } else if (
