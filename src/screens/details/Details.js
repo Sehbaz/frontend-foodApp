@@ -22,6 +22,7 @@ import {
   Card,
   CardContent,
   CardMedia,
+  IconButton,
   Paper,
   Snackbar,
   Typography,
@@ -111,6 +112,10 @@ const useStyles = makeStyles({
   totalContainer: {
     display: "flex",
     justifyContent: "space-between",
+  },
+  addBtn: {
+    border: "1px solid red",
+    textAlign: "center",
   },
 });
 const Details = (props) => {
@@ -234,7 +239,13 @@ const Details = (props) => {
 
                     <TableCell align="right"> &#8377;0.0</TableCell>
                     <TableCell align="right">
-                      <Button startIcon={<AddIcon />} onClick={itemAdded} />
+                      <IconButton
+                        aria-label="upload picture"
+                        component="span"
+                        onClick={itemAdded}
+                      >
+                        <AddIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -270,15 +281,21 @@ const Details = (props) => {
               </div>
               <div style={{ display: "flex" }}>
                 {" "}
-                <Button
+                <IconButton
+                  aria-label="upload picture"
+                  component="span"
                   onClick={onAdderIncrease}
-                  startIcon={<AddIcon />}
-                ></Button>
+                >
+                  <AddIcon />
+                </IconButton>
                 <p>{adder}</p>
-                <Button
+                <IconButton
+                  aria-label="upload picture"
+                  component="span"
                   onClick={onAdderDecrease}
-                  startIcon={<RemoveRoundedIcon />}
-                ></Button>
+                >
+                  <RemoveRoundedIcon />
+                </IconButton>
               </div>
               <div>
                 {" "}
